@@ -31,13 +31,13 @@ def softmax(x):
     #坑1：在一维数组和非一位数组的时候，shape有两种形式，
     # 故此处利用python中if条件的短路原理（应该有吧）来判断。
     if(len(np.shape(x)) > 1 and np.shape(x)[0]>1):
-        x = np.exp(x-np.max(x,axis=1).reshape(2,1))
+        x = np.exp(x-np.max(x,axis=1).reshape(x.shape[0],1))
         #坑2：axis在很多时候以一种指定方向的方式帮助遍历数组，
         # 此处若无axis,返回会是整个矩阵中的最大值拿来用也不是不可以，不过
         # 会造成溢出或者数值太小的问题
         #此处减最小值的意义：e^x时x若>1，则指数运算出的结果容易溢出，故将其变为负数，即减最大值。
         # 但是由于小数的位数有限，所以减去最大值是一个比较好的能体现出大小关系的选项。
-        x = x/x.sum(axis=1)
+        x = x/x.sum(axis=1).reshape(x.shape[0],1)
     else:
          x = np.exp(x-np.max(x))
          x=x/x.sum()
